@@ -8,3 +8,9 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 #tar cf - <your files here>
+
+mkdir -p /tmp/artifacts/
+touch /tmp/artifacts/artifact.blob
+echo "123 456" > /tmp/artifacts/artifact.blob
+cd /tmp/artifacts/
+tar cf - artifact.blob

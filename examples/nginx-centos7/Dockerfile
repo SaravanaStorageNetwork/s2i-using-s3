@@ -22,7 +22,16 @@ LABEL io.k8s.description="Nginx Webserver" \
 # Install the nginx web server package and clean the yum cache
 RUN yum install -y epel-release && \
     yum install -y --setopt=tsflags=nodocs nginx && \
+    yum install -y perl curl wget unzip perl-Digest-HMAC && \
     yum clean all
+
+
+RUN wget http://s3.amazonaws.com/doc/s3-example-code/s3-curl.zip && \
+    unzip s3-curl && \
+    mv /s3-curl/s3curl.pl /usr/local/bin/s3curl.pl && \
+    chmod +x /usr/local/bin/s3curl.pl && \
+    rm -f s3-curl.zip && \
+    rm -rf s3-curl
 
 # Change the default port for nginx 
 # Required if you plan on running images as a non-root user).

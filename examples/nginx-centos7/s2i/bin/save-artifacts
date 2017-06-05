@@ -15,11 +15,12 @@
 #cd /tmp/artifacts/
 #tar cf - artifact.blob
 
-ip_address=172.17.0.2
+source /usr/libexec/s2i/s3_access
+
 # s3curl.pl --id 'tv1' --key 'test' --put /dev/null  -- -k -v  http://$ip_address:8080/artifacts
 
 mkdir -p /tmp/artifacts/
 touch /tmp/artifacts/artifact.blob
-echo "123 789" > /tmp/artifacts/artifact.blob
+echo "123 456" > /tmp/artifacts/artifact.blob
 
 s3curl.pl --id 'tv1' --key 'test' --put  /tmp/artifacts/artifact.blob -- -k -v -s http://$ip_address:8080/artifacts/artifact.blob

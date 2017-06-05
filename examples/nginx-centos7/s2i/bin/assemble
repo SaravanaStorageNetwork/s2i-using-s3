@@ -7,6 +7,8 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
+source /usr/libexec/s2i/s3_access
+
 if [[ "$1" == "-h" ]]; then
 	# If the 'nginx-centos7' assemble script is executed with '-h' flag,
 	# print the usage.
@@ -22,6 +24,17 @@ fi
   #   echo "---> Restoring build artifacts..."
   #  mv /tmp/artifacts/*  /usr/share/nginx/html/
 # fi
+
+result=$(s3curl.pl  --id 'tv1' --key 'test'   -- -k -v -s http://$ip_address:8080/artifacts/   | grep Key -w)
+
+# artifacts present
+if [[ -n "$result" ]]; then
+    #TODO get all the objects from artifacts bucket and restore
+    s3curl.pl  --id 'tv1' --key 'test'   -- -o /tmp/artifact.blob http://$ip_address:8080/artifacts/artifact.blob
+    mv /tmp/artifact.blob /usr/share/nginx/html/
+else
+    echo "no artifact found"
+fi
 
 # Override the default nginx index.html file.
 # This is what we consider in this example 'installing the application'

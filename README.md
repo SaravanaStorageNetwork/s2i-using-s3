@@ -13,6 +13,8 @@ git clone repo which have required changes
 
 git clone https://github.com/SaravanaStorageNetwork/s2i-using-s3.git
 
+\# cd  s2i-using-s3/examples/nginx-centos7/
+
 \# docker build -t nginx-centos7 .
 
 ## Verify incremental build by using run script:

@@ -19,7 +19,10 @@ git clone https://github.com/SaravanaStorageNetwork/s2i-using-s3.git
 Update the IP address of gluster-s3 service in s2i/bin/s3_access.
 
 For example, updating address as 172.17.0.4: 
+
 \# sed -i.bak '/^ip_address=/s/=.*/='\"172.17.0.4\"'/'  ./s2i/bin/s3_access
+
+Now, build the builder container:
 
 \# docker build -t nginx-centos7 .
 

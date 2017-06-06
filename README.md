@@ -4,7 +4,8 @@
 ## First bring up gluster-s3 docker container.
 
    Follow README in https://github.com/SaravanaStorageNetwork/docker-gluster-s3
-
+   
+   Make a note of IP address of the gluster-s3 service
 
 ---
 
@@ -14,6 +15,11 @@ git clone repo which have required changes
 git clone https://github.com/SaravanaStorageNetwork/s2i-using-s3.git
 
 \# cd  s2i-using-s3/examples/nginx-centos7/
+
+Update the IP address of gluster-s3 service in s2i/bin/s3_access.
+
+For example, updating address as 172.17.0.4: 
+\# sed -i.bak '/^ip_address=/s/=.*/='\"172.17.0.4\"'/'  ./s2i/bin/s3_access
 
 \# docker build -t nginx-centos7 .
 

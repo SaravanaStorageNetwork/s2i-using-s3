@@ -25,16 +25,6 @@ fi
   #  mv /tmp/artifacts/*  /usr/share/nginx/html/
 # fi
 
-result=$(s3curl.pl  --id 'tv1' --key 'test'   -- -k -v -s http://$ip_address:8080/artifacts/   | grep Key -w)
-
-# artifacts present
-if [[ -n "$result" ]]; then
-    #TODO get all the objects from artifacts bucket and restore
-    s3curl.pl  --id 'tv1' --key 'test'   -- -o /tmp/artifact.blob http://$ip_address:8080/artifacts/artifact.blob
-    mv /tmp/artifact.blob /usr/share/nginx/html/
-else
-    echo "no artifact found"
-fi
 
 # Override the default nginx index.html file.
 # This is what we consider in this example 'installing the application'
@@ -42,4 +32,21 @@ fi
 # bundle install, and anything else you need.
 
 echo "---> Building and installing application from source..."
-mv /tmp/src/* /usr/share/nginx/html/
+cp  /tmp/src/* /usr/share/nginx/html/
+
+
+# To save the built artifacts into s3 store
+# Create bucket first
+s3curl.pl --id 'tv1' --key 'test' --put /dev/null  -- -k -v  http://$ip_address:8080/artifacts_1
+s3curl.pl --id 'tv1' --key 'test' --put  /tmp/src/* -- -k -v -s http://$ip_address:8080/artifacts_1/artifact.blob
+
+# To restore artifacts
+result=$(s3curl.pl  --id 'tv1' --key 'test'   -- -k -v -s http://$ip_address:8080/artifacts_2/   | grep Key -w)
+# ok, artifacts present
+if [[ -n "$result" ]]; then
+    #TODO get all the objects from artifacts bucket and restore
+    s3curl.pl  --id 'tv1' --key 'test'   -- -o /tmp/artifact_2.blob http://$ip_address:8080/artifacts_2/artifact_2.blob
+    mv /tmp/artifact_2.blob /usr/share/nginx/html/
+else
+    echo "no artifact found"
+fi
